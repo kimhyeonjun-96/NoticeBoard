@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="header" th:fragment="bodyHeader">
+    <!-- 메인 페이지로 이동 -->
+    <ul class="nav nav-pills float-left">
+        <li><a href="/">Home</a></li>
+    </ul>
+    <!-- 로그인이 안되어 있다면 회원가입 또는 로그인 버튼을, 로그인이 되어있다면 마이페이지 버튼을 -->
+    <ul class="nav nav-pills float-right">
+
+        <li>
+            <a href="/members/signup">회원가입</a>
+            <a href="/members/login">로그인</a>
+        </li>
+        <li th:if="${isLoggedIn}"><a href="/members/mypage">마이페이지</a></li>
+    </ul>
+<!--    <a href="/"><h3 class="text-muted">HELLO SHOP</h3></a>-->
+</div>
