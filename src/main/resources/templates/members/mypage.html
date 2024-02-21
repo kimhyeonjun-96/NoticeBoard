@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div th:with="userDetails=${#authentication.principal}">
+        <div class="user-details">
+            <div class="user-info">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <input type="hidden" th:hidden="${#authentication.principal.id}"/>
+                        </tr>
+                        <tr>
+                            <th>아이디</th>
+                            <td th:text="${#authentication.principal.memberId}"></td>
+                        </tr>
+                        <tr>
+                            <th>패스워드</th>
+                            <td th:if="${#authentication.principal != null}" th:text="${#authentication.principal.memberPwd} ? '********' : ''"></td>
+                        </tr>
+                        <tr>
+                            <th>이름</th>
+                            <td th:text="${#authentication.principal.memberName}"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${#authentication.principal.memberPhone}"></td>
+                        </tr>
+                        <tr>
+                            <th>도시</th>
+                            <td th:text="${#authentication.principal.city}"></td>
+                        </tr>
+                        <tr>
+                            <th>주소</th>
+                            <td th:text="${#authentication.principal.street}"></td>
+                        </tr>
+                        <tr>
+                            <th>우편번호</th>
+                            <td th:text="${#authentication.principal.zipcode}"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td align="center">
+                                <a href="#" th:href="@{/members/{id}/update(id=${#authentication.principal.id})}" class="btn btn-primary" role="button">정보 수정</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
