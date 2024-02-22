@@ -5,10 +5,12 @@ import com.noticeboard.notice.board.domain.member.dto.MemberDTO;
 import com.noticeboard.notice.board.domain.member.dto.SignupMemberRequest;
 import com.noticeboard.notice.board.domain.member.repository.MemberRepositoryImpl;
 import com.noticeboard.notice.board.global.util.Address;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,14 +64,33 @@ public class MemberService{
     public void updateMember(MemberDTO memberDTO) {
 
         Member member = memberRepositoryImpl.findMemberById(memberDTO.getId()); // 기존 회원 조회
+        Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
         Address address = new Address(memberDTO.getCity(), memberDTO.getStreet(), memberDTO.getZipcode()); // 주소 변경
         String encode = bCryptPasswordEncoder.encode(memberDTO.getMemberPwd()); // 패스워드 변경
         member.updateMember(encode, memberDTO.getMemberPhone(), address); // 변경된 회원 저장
 
+        MemberDTO updateMemberDto = member.convertToMemberDTO();
+
         // SecurityContext를 업데이트
-        Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(member, currentAuthentication.getCredentials(), currentAuthentication.getAuthorities());
+        Authentication updatedAuthentication = new UsernamePasswordAuthenticationToken(updateMemberDto, currentAuthentication.getCredentials(), currentAuthentication.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(updatedAuthentication);
+    }
+
+    @Transactional
+    public String withdrawal(MemberDTO memberDTO) {
+
+        Member member = memberRepositoryImpl.findMemberById(memberDTO.getId());
+
+        System.out.println("Service-withdrawal member password : "+ member.getMemberPwd());
+        System.out.println("Service-withdrawal memberDTO password : "+ memberDTO.getPassword());
+
+        if (bCryptPasswordEncoder.matches(memberDTO.getPassword(), member.getMemberPwd())) {
+            memberRepositoryImpl.deleteMember(member);
+            return "redirect:/logout";
+        } else{
+            System.out.println("패스워드가 일치하지 않습니다.");
+            return "redirect:/members/mypage";
+        }
     }
 }
 

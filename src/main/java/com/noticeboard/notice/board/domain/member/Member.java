@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,9 +41,13 @@ public class Member {
         this.address = address;
     }
 
-    // 회원 가입 후 id값 반환 메서드
+    // id값 반환 메서드
     public Long getId() {
         return this.id;
+    }
+
+    public String getMemberPwd(){
+        return this.memberPwd;
     }
 
     // MemberDTO로 변환하면 반환 메서드

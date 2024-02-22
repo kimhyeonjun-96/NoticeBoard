@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    } </style>
+<body>
+    <div class="container">
+        <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+        <form role="form" th:object="${memberDto}" method="post">
+            <input type="hidden" th:value="*{id}" class="form-control"/>
+            <div class="form-group">
+                <label for="password">패스워드</label>
+                <input type="password" id="password" name="password" th:field="*{memberPwd}" class="form-control" placeholder="패스워드를 입력하세요"
+                       th:class="${#fields.hasErrors('memberPwd')} ? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('memberPwd')}" th:errors="${memberPwd}">패스워드가 올바르지 않습니다.</p>
+            </div>
+            <button type="submit" class="btn btn-primary">회원 탈퇴</button>
+        </form>
+        <br/>
+        <div th:replace="fragments/footer :: footer"/>
+    </div> <!-- /container -->
+</body>
+</html>

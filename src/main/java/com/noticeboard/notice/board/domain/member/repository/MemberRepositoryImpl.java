@@ -26,4 +26,18 @@ public class MemberRepositoryImpl{
     public Member findMemberById(Long memberId) {
         return em.find(Member.class, memberId);
     }
+
+    /**
+     * 회원 아이디로 회원 조회
+     */
+    public Member findMemberByMemberId(String memberId) {
+        return em.find(Member.class, memberId);
+    }
+
+    /**
+     * 회원 삭제
+     */
+    public void deleteMember(Member member) {
+        em.remove(member);
+    }
 }

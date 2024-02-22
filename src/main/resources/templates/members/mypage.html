@@ -11,7 +11,7 @@
                 <table class="table table-striped">
                     <tbody>
                         <tr>
-                            <input type="hidden" th:hidden="${#authentication.principal.id}"/>
+                            <input type="hidden" th:value="${#authentication.principal.id}"/>
                         </tr>
                         <tr>
                             <th>아이디</th>
@@ -42,9 +42,11 @@
                             <td th:text="${#authentication.principal.zipcode}"></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td align="center">
                                 <a href="#" th:href="@{/members/{id}/update(id=${#authentication.principal.id})}" class="btn btn-primary" role="button">정보 수정</a>
+                            </td>
+                            <td align="center">
+                                <a href="#" th:href="@{/members/{id}/withdrawal(id=${#authentication.principal.id})}" class="btn btn-primary" role="button">회원 탈퇴</a>
                             </td>
                         </tr>
                     </tbody>

@@ -7,15 +7,13 @@ import com.noticeboard.notice.board.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -99,9 +97,8 @@ public class MemberController {
     public String createMemberUpdateForm(@PathVariable("id") Long memberId, Model model) {
 
 //        System.out.println("Controller-createMemberUpdateForm memberId : " + memberId );
-        MemberDTO memberDTO = memberService.findMemberDTOById(memberId);
 //        System.out.println("Controller-createMemberUpdateForm MemberDTO : " + memberDTO.toString());
-        model.addAttribute("memberDto", memberDTO);
+        model.addAttribute("memberDto", memberService.findMemberDTOById(memberId));
         return "members/updateMemberForm";
     }
 
@@ -109,11 +106,31 @@ public class MemberController {
      * 회원 정보 변경
      */
     @PostMapping("/members/{id}/update")
-    public String updateMemberProfile(@ModelAttribute("memberDto")MemberDTO memberDTO, BindingResult result) {
+    public String updateMemberProfile(@ModelAttribute("memberDto")MemberDTO memberDto) {
 
-        System.out.println("Controller-updateMemberProfile MemberDTO : " + memberDTO.toString());
-//        memberService.updateMember(memberDTO);
-        return "redirect:/";
+//        System.out.println("Controller-updateMemberProfile MemberDTO : " + memberDto.toString());
+        memberService.updateMember(memberDto);
+        MemberDTO byOneMember = memberService.findByOneMember(SecurityContextHolder.getContext().getAuthentication());
+        return "redirect:/members/mypage";
+    }
+
+    /**
+     * 회원 탈퇴 폼으로 이동
+     */
+    @GetMapping("/members/{id}/withdrawal")
+    public String createWithdrawalMemberForm(@PathVariable("id") Long memberId, Model model) {
+
+        model.addAttribute("memberDto", memberService.findMemberDTOById(memberId));
+        return "members/withdrawal";
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    @PostMapping("/members/{id}/withdrawal")
+    public String withdrawalMember(@ModelAttribute("memberDto")MemberDTO memberDto) {
+
+        System.out.println("Controller-withdrawalMember memberId : " + memberDto.toString());
+        return memberService.withdrawal(memberDto);
     }
 }
-
