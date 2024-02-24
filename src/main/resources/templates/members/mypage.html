@@ -54,16 +54,45 @@
             </div>
         </div>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>제목</th>
-                <th>내용</th>
-                <th>작성일</th>
-            </tr>
-            </thead>
-        </table>
+        <div class="user-articles">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(#authentication.principal.articles)}">
+                        <td colspan="8">
+                            <p align="center">아직 작성한 글이 없습니다.</p>
+                        </td>
+                    </tr>
+                    <tr th:each="article, iterStat : ${#authentication.principal.articles}">
+                        <td th:text="${iterStat.index + 1}"></td>
+                        <td th:text="${article.title}"></td>
+<!--                        <td th:text="${article.content}"></td>-->
+                        <td th:text="${#strings.length(article.content) > 10 ? #strings.substring(article.content, 0, 10) + '...' : article.content}"></td>
+                        <td th:text="${#authentication.principal.memberId}"></td>
+                        <td th:text="${article.createDate}"></td>
+                        <td colspan="8" align="right">
+                            <a href="#" th:href="@{/articles/{id}/update (id=${#authentication.principal.id})}" class="btn btn-primary" role="button">글 수정</a>
+                            <a href="#" th:href="@{/articles/{id}/remove (id=${#authentication.principal.id})}" class="btn btn-primary" role="button">글 삭제</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="8" align="right">
+                            <a href="#" th:href="@{/articles/{id}/new (id=${#authentication.principal.id})}" class="btn btn-primary" role="button">글 작성</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div th:replace="fragments/footer :: footer"/>

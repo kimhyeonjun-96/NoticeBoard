@@ -86,6 +86,9 @@ public class MemberController {
     public String mypage(Model model) {
 
         MemberDTO memberDTO = memberService.findByOneMember(SecurityContextHolder.getContext().getAuthentication());
+
+        System.out.println(memberDTO.getAuthorities().size());
+
         model.addAttribute("memberDto", memberDTO);
         return "members/mypage";
     }

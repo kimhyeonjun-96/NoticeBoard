@@ -1,5 +1,7 @@
 package com.noticeboard.notice.board.domain.member.dto;
 
+import com.noticeboard.notice.board.domain.article.Article;
+import com.noticeboard.notice.board.domain.article.dto.ArticleDTO;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class MemberDTO implements UserDetails {
     private String street;
     private String zipcode;
 
+    List<ArticleDTO> articles = new ArrayList<>();
+
     public MemberDTO() {}
 
     public MemberDTO(Long id, String memberId, String memberPwd, String memberName, String memberPhone, String city, String street, String zipcode) {
@@ -34,6 +39,18 @@ public class MemberDTO implements UserDetails {
         this.city = city;
         this.street = street;
         this.zipcode = zipcode;
+    }
+
+    public MemberDTO(Long id, String memberId, String memberPwd, String memberName, String memberPhone, String city, String street, String zipcode, List<ArticleDTO> articles) {
+        this.id = id;
+        this.memberId = memberId;
+        this.memberPwd = memberPwd;
+        this.memberName = memberName;
+        this.memberPhone = memberPhone;
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
+        this.articles = articles;
     }
 
     @Override

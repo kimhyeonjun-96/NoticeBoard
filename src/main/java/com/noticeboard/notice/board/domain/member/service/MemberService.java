@@ -1,19 +1,22 @@
 package com.noticeboard.notice.board.domain.member.service;
 
+import com.noticeboard.notice.board.domain.article.Article;
+import com.noticeboard.notice.board.domain.article.dto.ArticleDTO;
 import com.noticeboard.notice.board.domain.member.Member;
 import com.noticeboard.notice.board.domain.member.dto.MemberDTO;
 import com.noticeboard.notice.board.domain.member.dto.SignupMemberRequest;
 import com.noticeboard.notice.board.domain.member.repository.MemberRepositoryImpl;
 import com.noticeboard.notice.board.global.util.Address;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,7 +50,11 @@ public class MemberService{
      * authentication을 통한 로그인한 회원 정보 반환 로직
      */
     public MemberDTO findByOneMember(Authentication authentication){
-        return (MemberDTO) authentication.getPrincipal();
+
+        MemberDTO details = (MemberDTO) authentication.getPrincipal();
+        List<ArticleDTO> articleDTOList = getMemberArticles(details.getId());
+        details.setArticles(articleDTOList);
+        return details;
     }
 
     /**
@@ -76,6 +83,9 @@ public class MemberService{
         SecurityContextHolder.getContext().setAuthentication(updatedAuthentication);
     }
 
+    /**
+     * 호원 탈퇴
+     */
     @Transactional
     public String withdrawal(MemberDTO memberDTO) {
 
@@ -92,5 +102,20 @@ public class MemberService{
             return "redirect:/members/mypage";
         }
     }
+
+    /**
+     * 회원이 작성한 글 목록 가져오기 로직
+     */
+    private List<ArticleDTO> getMemberArticles(Long memberId) {
+
+        Member member = memberRepositoryImpl.findMemberById(memberId);
+        List<ArticleDTO> articleDTOs = new ArrayList<>();
+        for (Article newArticle : member.getArticles()) {
+            articleDTOs.add(newArticle.convertToArticleDTO());
+        }
+        return articleDTOs;
+    }
+
+
 }
 
