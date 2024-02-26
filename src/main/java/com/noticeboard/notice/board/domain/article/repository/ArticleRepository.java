@@ -12,4 +12,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
      * 특정 회원의 글 리스트 조회
      */
     Page<Article> findALlByMember(Member member, Pageable pageable);
+
+    /**
+     * 모든 회원의 글 리스트 조회
+     */
+    Page<Article> findAll(Pageable pageable);
 }

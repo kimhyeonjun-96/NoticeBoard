@@ -42,7 +42,7 @@ public class ArticleController {
      * 글 수정 폼으로 이동
      */
     @GetMapping("/articles/{id}/update")
-    public String createUpdateArticle(@PathVariable("id")Long memberId, @RequestParam("articleId")Long articleId, Model model) {
+    public String createUpdateArticle(@PathVariable("id") Long memberId, @RequestParam("articleId") Long articleId, Model model) {
 
         model.addAttribute("articleDTO", articleService.findArticleDTOById(articleId));
         return "articles/updateArticleForm";
@@ -52,7 +52,7 @@ public class ArticleController {
      * 글 수정
      */
     @PostMapping("/articles/{id}/update")
-    public String updateArticle(@PathVariable("id")Long memberId, @ModelAttribute("articleDTO")ArticleDTO articleDTO) {
+    public String updateArticle(@PathVariable("id") Long memberId, @ModelAttribute("articleDTO") ArticleDTO articleDTO) {
 
         articleService.updateArtile(articleDTO);
         MemberDTO byOneMember = memberService.findByOneMember(SecurityContextHolder.getContext().getAuthentication());
@@ -63,9 +63,21 @@ public class ArticleController {
      * 글 삭제
      */
     @PostMapping("/articles/{id}/remove")
-    public String removeArticle(@PathVariable("id") Long memberId, @RequestParam("articleId")Long articleId) {
+    public String removeArticle(@PathVariable("id") Long memberId, @RequestParam("articleId") Long articleId) {
 
         articleService.removeArticle(memberId, articleId);
         return "redirect:/members/mypage";
+    }
+
+    /**
+     * 글 상세 페이지 이동
+     */
+    @GetMapping("/articles/{id}/detail")
+    public String showArticleDetails(@PathVariable("id") Long articleId, Model model) {
+
+        System.out.println("Controller-showArticleDetails articleId = " + articleId);
+
+        model.addAttribute("articleDTO", articleService.findArticleDTOById(articleId));
+        return "articles/showDetailArticle";
     }
 }

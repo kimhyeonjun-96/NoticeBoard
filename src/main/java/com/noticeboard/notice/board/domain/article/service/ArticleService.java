@@ -25,6 +25,23 @@ public class ArticleService {
     private final ArticleRepositoryImpl articleRepositoryImpl;
     private final MemberRepositoryImpl memberRepository;
 
+
+    /**
+     * 모든 글 조회
+     */
+    public Page<ArticleDTO> getAllArticles(Pageable pageable) {
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Article> articlePage = articleRepository.findAll(pageable);
+
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        for (Article article : articlePage) {
+            articleDTOList.add(article.convertToArticleDTO());
+        }
+        return new PageImpl<>(articleDTOList, pageable, articlePage.getTotalElements());
+    }
+
     /**
      * 새로운 글 작성
      */
