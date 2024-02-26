@@ -22,7 +22,7 @@ public class Article {
     private Timestamp date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
 
@@ -33,6 +33,10 @@ public class Article {
         this.date = date;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     // 회원 정보 추가
     public void updateMember(Member member) {
         this.member = member;
@@ -41,10 +45,33 @@ public class Article {
     // ArticleDTO로 변환하여 반환
     public ArticleDTO convertToArticleDTO() {
         return new ArticleDTO(
+                this.id,
                 this.title,
                 this.content,
                 this.date,
                 this.member.convertToMemberDTO()
         );
+    }
+
+    // Member 삭제
+    public void removeMember(){
+        this.member = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", date=" + date +
+                ", member=" + member +
+                '}';
+    }
+
+    // 글 수정
+    public void updateArticle(String content, Timestamp updateDate) {
+        this.content = content;
+        this.date = updateDate;
     }
 }

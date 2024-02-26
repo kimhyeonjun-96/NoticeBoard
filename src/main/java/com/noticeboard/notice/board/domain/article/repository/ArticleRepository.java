@@ -1,24 +1,15 @@
 package com.noticeboard.notice.board.domain.article.repository;
 
 import com.noticeboard.notice.board.domain.article.Article;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.noticeboard.notice.board.domain.member.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import static org.hibernate.query.sqm.tree.SqmNode.log;
-
-@Repository
-@RequiredArgsConstructor
-public class ArticleRepository {
-
-    private final EntityManager em;
+public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     /**
-     * 글 저장
+     * 특정 회원의 글 리스트 조회
      */
-    public void saveArticle(Article article) {
-        em.persist(article);
-    }
-
-
+    Page<Article> findALlByMember(Member member, Pageable pageable);
 }

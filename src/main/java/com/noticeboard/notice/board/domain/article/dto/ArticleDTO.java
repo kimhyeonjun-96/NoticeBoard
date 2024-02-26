@@ -29,6 +29,14 @@ public class ArticleDTO {
         this.member = member;
     }
 
+    public ArticleDTO(Long articleId, String title, String content, Timestamp createDate, MemberDTO member) {
+        this.articleId = articleId;
+        this.title = title;
+        this.content = content;
+        this.createDate = createDate;
+        this.member = member;
+    }
+
     @Override
     public String toString() {
         return "ArticleDTO{" +

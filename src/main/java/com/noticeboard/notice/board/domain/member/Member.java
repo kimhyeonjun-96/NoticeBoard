@@ -94,6 +94,13 @@ public class Member {
 
     // 회원이 작성한 글 삭제
     public void removeArticle(Long articleId) {
-        this.articles.remove(articleId);
+//        this.articles.remove(articleId);
+        this.articles.stream()
+                .filter(article -> article.getId().equals(articleId))
+                .findFirst()
+                .ifPresent(article -> {
+                    this.articles.remove(article);
+                    article.removeMember(); // Article 엔터티의 member 속성을 null로 설정
+                });
     }
 }

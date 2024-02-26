@@ -8,6 +8,7 @@ import com.noticeboard.notice.board.domain.member.dto.SignupMemberRequest;
 import com.noticeboard.notice.board.domain.member.repository.MemberRepositoryImpl;
 import com.noticeboard.notice.board.global.util.Address;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -91,8 +92,8 @@ public class MemberService{
 
         Member member = memberRepositoryImpl.findMemberById(memberDTO.getId());
 
-        System.out.println("Service-withdrawal member password : "+ member.getMemberPwd());
-        System.out.println("Service-withdrawal memberDTO password : "+ memberDTO.getPassword());
+//        System.out.println("Service-withdrawal member password : "+ member.getMemberPwd());
+//        System.out.println("Service-withdrawal memberDTO password : "+ memberDTO.getPassword());
 
         if (bCryptPasswordEncoder.matches(memberDTO.getPassword(), member.getMemberPwd())) {
             memberRepositoryImpl.deleteMember(member);
@@ -115,7 +116,6 @@ public class MemberService{
         }
         return articleDTOs;
     }
-
 
 }
 

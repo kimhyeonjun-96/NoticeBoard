@@ -1,12 +1,18 @@
 package com.noticeboard.notice.board.domain.member.controller;
 
 
+import com.noticeboard.notice.board.domain.article.Article;
+import com.noticeboard.notice.board.domain.article.dto.ArticleDTO;
+import com.noticeboard.notice.board.domain.article.service.ArticleService;
 import com.noticeboard.notice.board.domain.member.dto.MemberDTO;
 import com.noticeboard.notice.board.domain.member.dto.SignupMemberRequest;
 import com.noticeboard.notice.board.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ArticleService articleService;
 
     /**
      * 회원가입 폼으로 이동
@@ -83,13 +90,13 @@ public class MemberController {
      * 마이페이지
      */
     @GetMapping("/members/mypage")
-    public String mypage(Model model) {
+    public String mypage(Model model, @PageableDefault(size = 5)Pageable pageable) {
 
         MemberDTO memberDTO = memberService.findByOneMember(SecurityContextHolder.getContext().getAuthentication());
-
-        System.out.println(memberDTO.getAuthorities().size());
+        Page<ArticleDTO> articlePage = articleService.getPageable(memberDTO, pageable);
 
         model.addAttribute("memberDto", memberDTO);
+        model.addAttribute("articlePage", articlePage);
         return "members/mypage";
     }
 
@@ -133,7 +140,7 @@ public class MemberController {
     @PostMapping("/members/{id}/withdrawal")
     public String withdrawalMember(@ModelAttribute("memberDto")MemberDTO memberDto) {
 
-        System.out.println("Controller-withdrawalMember memberId : " + memberDto.toString());
+//        System.out.println("Controller-withdrawalMember memberId : " + memberDto.toString());
         return memberService.withdrawal(memberDto);
     }
 }
