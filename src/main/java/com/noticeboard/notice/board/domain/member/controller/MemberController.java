@@ -1,7 +1,5 @@
 package com.noticeboard.notice.board.domain.member.controller;
 
-
-import com.noticeboard.notice.board.domain.article.Article;
 import com.noticeboard.notice.board.domain.article.dto.ArticleDTO;
 import com.noticeboard.notice.board.domain.article.service.ArticleService;
 import com.noticeboard.notice.board.domain.member.dto.MemberDTO;
@@ -13,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -106,8 +103,6 @@ public class MemberController {
     @GetMapping("/members/{id}/update")
     public String createMemberUpdateForm(@PathVariable("id") Long memberId, Model model) {
 
-//        System.out.println("Controller-createMemberUpdateForm memberId : " + memberId );
-//        System.out.println("Controller-createMemberUpdateForm MemberDTO : " + memberDTO.toString());
         model.addAttribute("memberDto", memberService.findMemberDTOById(memberId));
         return "members/updateMemberForm";
     }
@@ -118,7 +113,6 @@ public class MemberController {
     @PostMapping("/members/{id}/update")
     public String updateMemberProfile(@ModelAttribute("memberDto")MemberDTO memberDto) {
 
-//        System.out.println("Controller-updateMemberProfile MemberDTO : " + memberDto.toString());
         memberService.updateMember(memberDto);
         MemberDTO byOneMember = memberService.findByOneMember(SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/members/mypage";
@@ -140,7 +134,6 @@ public class MemberController {
     @PostMapping("/members/{id}/withdrawal")
     public String withdrawalMember(@ModelAttribute("memberDto")MemberDTO memberDto) {
 
-//        System.out.println("Controller-withdrawalMember memberId : " + memberDto.toString());
         return memberService.withdrawal(memberDto);
     }
 }

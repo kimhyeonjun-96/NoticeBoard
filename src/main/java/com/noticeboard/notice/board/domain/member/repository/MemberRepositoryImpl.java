@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -39,5 +40,14 @@ public class MemberRepositoryImpl{
      */
     public void deleteMember(Member member) {
         em.remove(member);
+    }
+
+    public Optional<Member> findByMemberIdAndMemberName(String memberId, String memberName) {
+
+        List<Member> resultList = em.createQuery("select m from Member m where m.memberId = :memberId and m.memberName = : memberName", Member.class)
+                .setParameter("memberId", memberId)
+                .setParameter("memberName", memberName)
+                .getResultList();
+        return resultList.stream().findAny();
     }
 }

@@ -6,6 +6,8 @@ import com.noticeboard.notice.board.domain.member.Member;
 import com.noticeboard.notice.board.domain.member.dto.MemberDTO;
 import com.noticeboard.notice.board.domain.member.dto.SignupMemberRequest;
 import com.noticeboard.notice.board.domain.member.repository.MemberRepositoryImpl;
+import com.noticeboard.notice.board.global.errors.errorcode.MemberErrorCode;
+import com.noticeboard.notice.board.global.errors.exception.FaildToAuthenticatePasswordException;
 import com.noticeboard.notice.board.global.util.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,18 +34,28 @@ public class MemberService{
      */
     @Transactional
     public Long signup(SignupMemberRequest memberDto) {
+
         // 아이디 중복 검사
-        // 계정 저장
-        // 회원 pk id 리턴
+        validateDuplicateMember(memberDto);
+
         Address address = new Address(memberDto.getCity(), memberDto.getStreet(), memberDto.getZipcode());
         // 패스워드 암호화
         String encode = bCryptPasswordEncoder.encode(memberDto.getMemberPwd());
-        // 가입회원 생성
         Member signupMember = new Member(memberDto.getMemberId(), encode, memberDto.getMemberName(), memberDto.getMemberPhone(), address);
-
         // 회원 가입
         memberRepositoryImpl.signupMember(signupMember);
+
+        // 회원 pk id 리턴
         return signupMember.getId();
+    }
+
+    /**
+     *회원가입 시 중복회원 검증
+     */
+    private void validateDuplicateMember(SignupMemberRequest memberDTO) {
+        memberRepositoryImpl.findByMemberIdAndMemberName(memberDTO.getMemberId(), memberDTO.getMemberName()).ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        });
     }
 
     /**
@@ -92,15 +104,11 @@ public class MemberService{
 
         Member member = memberRepositoryImpl.findMemberById(memberDTO.getId());
 
-//        System.out.println("Service-withdrawal member password : "+ member.getMemberPwd());
-//        System.out.println("Service-withdrawal memberDTO password : "+ memberDTO.getPassword());
-
         if (bCryptPasswordEncoder.matches(memberDTO.getPassword(), member.getMemberPwd())) {
             memberRepositoryImpl.deleteMember(member);
             return "redirect:/logout";
         } else{
-            System.out.println("패스워드가 일치하지 않습니다.");
-            return "redirect:/members/mypage";
+            throw new FaildToAuthenticatePasswordException(MemberErrorCode.FAILED_TO_AUTHENTICATE_PASSWORD);
         }
     }
 
