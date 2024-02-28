@@ -34,7 +34,7 @@
 
 #### 배포
 vm 생성 - vagrant init
-<img width="350" height="350" alt="create_vm_vagrant" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/281f88a8-e703-4eb7-82c5-1e94f5398586">
+<img width="437" alt="create_vm_vagrant" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/281f88a8-e703-4eb7-82c5-1e94f5398586">
 
 vm 생성 - Vagrantfile 작성
 <img width="1265" alt="create_vm_vagrant_02" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/ae947827-8585-4003-93ed-9929f08e7965">
