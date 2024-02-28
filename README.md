@@ -42,8 +42,7 @@
 
 
 ### vm 생성 - vagrant 실행
-<img width="313" alt="create_vm_vagrant_03" src="https://github.com/
-kimhyeonjun-96/NoticeBoard/assets/69852555/010eed41-a245-4db5-b90b-978906e4f2a5">
+<img width="313" alt="create_vm_vagrant_03" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/8324f844-0969-4133-80e2-026114848da0">
 
 
 ### vm 확인
