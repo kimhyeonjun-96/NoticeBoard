@@ -40,9 +40,13 @@ vm 생성 - Vagrantfile 작성
 <img width="1265" alt="create_vm_vagrant_02" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/ae947827-8585-4003-93ed-9929f08e7965">
 
 vm 생성 - vagrant 실행
-<img width="313" alt="create_vm_vagrant_03" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/010eed41-a245-4db5-b90b-978906e4f2a5">
+
+<img width="313" alt="create_vm_vagrant_03" src="https://github.com/
+kimhyeonjun-96/NoticeBoard/assets/69852555/010eed41-a245-4db5-b90b-978906e4f2a5">
+
 
 vm 확인
+
 <img width="332" alt="check_vm" src="https://github.com/kimhyeonjun-96/NoticeBoard/assets/69852555/d4208287-caa3-4146-a0a2-f6a6c5549456">
 
 vm 접속
