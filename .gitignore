@@ -6,7 +6,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .gradle
-application.*
+application.properties
+application.yml
 build/
 
 ### Eclipse ###
